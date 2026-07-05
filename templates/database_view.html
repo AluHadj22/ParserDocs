@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ display_name }} — Региональный правовой портал ЧР</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f8;
+            color: #1a1a2e;
+            min-height: 100vh;
+        }
+
+        /* Декоративный фон для эффекта стекла */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(233, 69, 96, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -100px;
+            left: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 149, 59, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .header-main {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            background: rgba(26, 26, 46, 0.55);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 16px 0;
+            transition: background 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-main .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .logo-area a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.3s;
+        }
+
+        .logo-area a:hover { color: #fff; }
+
+        .logo-area h1 {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-area .group-label {
+            color: rgba(255,255,255,0.3);
+            font-size: 0.7rem;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header {
+            padding: 20px 0 16px;
+        }
+
+        .page-header .back-link {
+            color: #e94560;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .page-header .back-link:hover { text-decoration: underline; }
+
+        .filters {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .filters select, .filters input {
+            padding: 8px 14px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.9);
+            font-family: 'Inter', sans-serif;
+            min-width: 180px;
+            transition: all 0.3s;
+        }
+
+        .filters select:focus, .filters input:focus {
+            outline: none;
+            border-color: #e94560;
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+        }
+
+        .filters button {
+            padding: 8px 20px;
+            background: #e94560;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .filters button:hover {
+            background: #c73652;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
+        }
+
+        .filters .clear-btn {
+            background: rgba(241, 243, 244, 0.7);
+            color: #5f6368;
+        }
+
+        .filters .clear-btn:hover {
+            background: #e8eaed;
+            transform: translateY(-1px);
+            box-shadow: none;
+        }
+
+        .stats {
+            font-size: 0.8rem;
+            color: #5f6368;
+            margin-bottom: 12px;
+            padding: 8px 0;
+        }
+
+        .documents-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-bottom: 30px;
+        }
+
+        .doc-item {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 8px;
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .doc-item:hover {
+            border-color: rgba(233, 69, 96, 0.3);
+            box-shadow: 0 8px 32px rgba(233, 69, 96, 0.06);
+            transform: translateX(3px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .doc-title {
+            font-weight: 500;
+            color: #1a1a2e;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            word-break: break-word;
+        }
+
+        .doc-title a {
+            color: #1a1a2e;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .doc-title a:hover { color: #e94560; }
+
+        .doc-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.7rem;
+            color: #9aa0a6;
+            margin-top: 4px;
+        }
+
+        .doc-meta .category {
+            background: rgba(241, 243, 244, 0.7);
+            padding: 2px 10px;
+            border-radius: 4px;
+            color: #5f6368;
+        }
+
+        .doc-meta .file-link {
+            color: #e94560;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .doc-meta .file-link:hover { text-decoration: underline; }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            padding-bottom: 30px;
+        }
+
+        .pagination a, .pagination span {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            color: #5f6368;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.25s;
+        }
+
+        .pagination a:hover {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #e94560;
+        }
+        .pagination .active {
+            background: #e94560;
+            color: #fff;
+            border-color: #e94560;
+            box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
+        }
+        .pagination .disabled { opacity: 0.4; cursor: default; }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9aa0a6;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .no-results .icon { font-size: 2.4rem; margin-bottom: 12px; }
+        .no-results h3 { font-weight: 500; color: #5f6368; margin-bottom: 4px; }
+
+        .footer {
+            margin-top: 20px;
+            padding: 20px 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .footer .copyright {
+            color: #9aa0a6;
+            font-size: 0.7rem;
+        }
+
+        @media (max-width: 768px) {
+            .filters { flex-direction: column; align-items: stretch; }
+            .filters select, .filters input { min-width: auto; width: 100%; }
+            .header-main .container { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header-main">
+        <div class="container">
+            <div class="logo-area">
+                {% if is_group %}
+                    <a href="/db/{{ db_name }}"><i class="fas fa-arrow-left"></i> Назад</a>
+                    <span class="group-label">{{ group_name }}</span>
+                    <h1>{{ display_name }}</h1>
+                {% else %}
+                    <a href="/"><i class="fas fa-arrow-left"></i> На главную</a>
+                    <h1>{{ display_name }}</h1>
+                {% endif %}
+            </div>
+            <span style="color: rgba(255,255,255,0.4); font-size: 0.75rem;">{{ total }} документов</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            {% if is_group %}
+                <a href="/db/{{ db_name }}" class="back-link">← К списку разделов</a>
+            {% else %}
+                <a href="/" class="back-link">← К выбору источника</a>
+            {% endif %}
+        </div>
+
+        <div class="filters">
+            {% if is_minzdrav %}
+                <select onchange="window.location.href=this.value">
+                    <option value="{{ base_url }}">Все категории</option>
+                    {% for cat in minzdrav_categories %}
+                    <option value="{{ base_url }}?category={{ cat|urlencode }}" {% if current_category == cat %}selected{% endif %}>
+                        {{ cat }}
+                    </option>
+                    {% endfor %}
+                </select>
+            {% elif is_minobr %}
+                <select onchange="window.location.href=this.value">
+                    <option value="{{ base_url }}">Все категории</option>
+                    {% for cat in minobr_categories %}
+                    <option value="{{ base_url }}?category={{ cat|urlencode }}" {% if current_category == cat %}selected{% endif %}>
+                        {{ cat }}
+                    </option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                {% if categories %}
+                <select onchange="window.location.href=this.value">
+                    <option value="{{ base_url }}">Все категории</option>
+                    {% for cat in categories %}
+                    <option value="{{ base_url }}?category={{ cat|urlencode }}" {% if current_category == cat %}selected{% endif %}>
+                        {{ cat }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+
+                {% if is_searchable %}
+                <form method="get" style="display: flex; gap: 8px; flex: 1;" action="{{ base_url }}">
+                    {% if sub_db %}<input type="hidden" name="sub_db" value="{{ sub_db }}">{% endif %}
+                    <input type="hidden" name="category" value="{{ current_category or '' }}">
+                    <input type="text" name="search" placeholder="Поиск по названию..." value="{{ search_term or '' }}" style="flex: 1; min-width: 120px;">
+                    <button type="submit">Найти</button>
+                    {% if search_term %}
+                    <a href="{{ base_url }}{% if current_category %}?category={{ current_category|urlencode }}{% endif %}" class="clear-btn" style="padding: 8px 16px; background: rgba(241, 243, 244, 0.7); color: #5f6368; border-radius: 6px; text-decoration: none; font-size: 0.8rem;">✕</a>
+                    {% endif %}
+                </form>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div class="stats">
+            {% if current_category %}
+            Категория: <strong>{{ current_category }}</strong> ·
+            {% endif %}
+            <strong>{{ total }}</strong> документов
+            {% if page > 1 %} · Страница {{ page }} из {{ total_pages }}{% endif %}
+        </div>
+
+        {% if documents %}
+        <div class="documents-grid">
+            {% for doc in documents %}
+            <div class="doc-item">
+                <div class="doc-title">
+                    {% if doc.file_url %}
+                    <a href="{{ doc.file_url }}" target="_blank">{{ doc.display_title }}</a>
+                    {% else %}
+                    {{ doc.display_title }}
+                    {% endif %}
+                </div>
+                <div class="doc-meta">
+                    {% if doc.category %}
+                    <span class="category">{{ doc.category }}</span>
+                    {% endif %}
+                    {% if doc.date %}
+                    <span>{{ doc.date }}</span>
+                    {% elif doc.pub_date %}
+                    <span>{{ doc.pub_date }}</span>
+                    {% elif doc.sign_date %}
+                    <span>{{ doc.sign_date }}</span>
+                    {% endif %}
+                    {% if doc.file_url %}
+                    <a href="{{ doc.file_url }}" target="_blank" class="file-link">Скачать</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% if page > 1 %}
+            <a href="?page={{ page-1 }}{% if sub_db %}&sub_db={{ sub_db }}{% endif %}{% if current_category %}&category={{ current_category|urlencode }}{% endif %}{% if search_term %}&search={{ search_term|urlencode }}{% endif %}">←</a>
+            {% else %}
+            <span class="disabled">←</span>
+            {% endif %}
+
+            {% for p in range(1, total_pages + 1) %}
+                {% if p == page %}
+                <span class="active">{{ p }}</span>
+                {% elif p <= 5 or p > total_pages - 2 or (p >= page - 2 and p <= page + 2) %}
+                <a href="?page={{ p }}{% if sub_db %}&sub_db={{ sub_db }}{% endif %}{% if current_category %}&category={{ current_category|urlencode }}{% endif %}{% if search_term %}&search={{ search_term|urlencode }}{% endif %}">{{ p }}</a>
+                {% elif p == 6 or p == total_pages - 3 %}
+                <span>…</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page < total_pages %}
+            <a href="?page={{ page+1 }}{% if sub_db %}&sub_db={{ sub_db }}{% endif %}{% if current_category %}&category={{ current_category|urlencode }}{% endif %}{% if search_term %}&search={{ search_term|urlencode }}{% endif %}">→</a>
+            {% else %}
+            <span class="disabled">→</span>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="no-results">
+            <div class="icon">📄</div>
+            <h3>Документы не найдены</h3>
+            <p>Измените параметры фильтрации</p>
+            <a href="/db/{{ db_name }}{% if sub_db %}?sub_db={{ sub_db }}{% endif %}" style="display: inline-block; margin-top: 12px; color: #e94560; text-decoration: none; font-size: 0.85rem;">Сбросить фильтры</a>
+        </div>
+        {% endif %}
+
+        <footer class="footer">
+            <div class="copyright">© 2026 Региональный правовой портал Чеченской Республики</div>
+        </footer>
+    </div>
+</body>
+</html>

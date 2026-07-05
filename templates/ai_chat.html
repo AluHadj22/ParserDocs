@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ИИ-ассистент — Региональный правовой портал ЧР</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f0f2f8;
+            color: #1a1a2e;
+            min-height: 100vh;
+        }
+
+        /* Декоративный фон */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(233, 69, 96, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 149, 59, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .header-main {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            background: rgba(26, 26, 46, 0.25);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 18px 0;
+            transition: all 0.3s ease;
+        }
+
+        .header-main.scrolled {
+            background: rgba(26, 26, 46, 0.45);
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-main .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-area a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        .logo-area a:hover {
+            color: #fff;
+        }
+
+        .logo-area h1 {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header {
+            padding: 24px 0 20px;
+        }
+
+        .page-header .back-link {
+            color: #e94560;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .page-header .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .page-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 4px;
+            color: #1a1a2e;
+        }
+
+        .page-header .desc {
+            color: #5f6368;
+            font-size: 0.9rem;
+        }
+
+        /* ============================================================
+           ЧАТ
+           ============================================================ */
+        .chat-container {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            height: 580px;
+        }
+
+        /* Шапка чата */
+        .chat-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .chat-header .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e94560, #c73652);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .chat-header .info {
+            flex: 1;
+        }
+
+        .chat-header .info .name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #1a1a2e;
+        }
+
+        .chat-header .info .status {
+            font-size: 0.7rem;
+            color: #00953b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-header .info .status .dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00953b;
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .chat-header .btn-clear {
+            background: none;
+            border: none;
+            color: #9aa0a6;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chat-header .btn-clear:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #e94560;
+        }
+
+        /* Сообщения */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: #e94560;
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.assistant {
+            align-self: flex-start;
+            background: rgba(241, 243, 244, 0.8);
+            color: #1a1a2e;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.assistant a {
+            color: #e94560;
+            text-decoration: none;
+        }
+
+        .message.assistant a:hover {
+            text-decoration: underline;
+        }
+
+        .message .timestamp {
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.5);
+            display: block;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .message.assistant .timestamp {
+            color: #9aa0a6;
+        }
+
+        .message .model-badge {
+            font-size: 0.55rem;
+            color: rgba(255, 255, 255, 0.4);
+            display: block;
+            text-align: right;
+            margin-top: 2px;
+        }
+
+        .message.assistant .model-badge {
+            color: #9aa0a6;
+        }
+
+        /* Индикатор печати */
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            align-self: flex-start;
+            background: rgba(241, 243, 244, 0.6);
+            border-radius: 12px;
+            border-bottom-left-radius: 4px;
+            margin: 0 24px 4px 24px;
+        }
+
+        .typing-indicator .dot-typing {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #9aa0a6;
+            animation: typing 1.4s ease-in-out infinite both;
+        }
+
+        .typing-indicator .dot-typing:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator .dot-typing:nth-child(2) { animation-delay: -0.16s; }
+        .typing-indicator .dot-typing:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Поле ввода */
+        .chat-input-area {
+            padding: 16px 24px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            gap: 12px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .chat-input-area textarea {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            resize: none;
+            outline: none;
+            transition: border-color 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            max-height: 120px;
+            min-height: 44px;
+            line-height: 1.5;
+        }
+
+        .chat-input-area textarea:focus {
+            border-color: #e94560;
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+        }
+
+        .chat-input-area textarea::placeholder {
+            color: #b0b3b8;
+        }
+
+        .chat-input-area .btn-send {
+            padding: 10px 20px;
+            background: #e94560;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-input-area .btn-send:hover {
+            background: #c73652;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(233, 69, 96, 0.25);
+        }
+
+        .chat-input-area .btn-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Информация внизу */
+        .chat-info {
+            padding: 12px 24px;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            color: #9aa0a6;
+            background: rgba(255, 255, 255, 0.3);
+            flex-shrink: 0;
+        }
+
+        .chat-info i {
+            font-size: 0.8rem;
+        }
+
+        /* Ошибка */
+        .error-page {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .error-page .icon {
+            font-size: 3rem;
+            color: #9aa0a6;
+            margin-bottom: 16px;
+        }
+
+        .error-page h2 {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .error-page p {
+            color: #5f6368;
+            margin-bottom: 20px;
+        }
+
+        .error-page .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            background: #e94560;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .error-page .btn:hover {
+            background: #c73652;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.25);
+        }
+
+        .footer {
+            margin-top: 20px;
+            padding: 20px 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .footer .copyright {
+            color: #9aa0a6;
+            font-size: 0.7rem;
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                height: 500px;
+                border-radius: 12px;
+            }
+
+            .chat-header {
+                padding: 12px 16px;
+            }
+
+            .chat-messages {
+                padding: 16px;
+            }
+
+            .chat-input-area {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+            }
+
+            .chat-input-area textarea {
+                min-height: 38px;
+                font-size: 0.8rem;
+            }
+
+            .chat-input-area .btn-send {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+
+            .message {
+                max-width: 92%;
+                font-size: 0.85rem;
+                padding: 10px 14px;
+            }
+
+            .header-main .container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .page-header h2 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header-main" id="mainHeader">
+        <div class="container">
+            <div class="logo-area">
+                <a href="/"><i class="fas fa-arrow-left"></i> На главную</a>
+                <h1>ИИ-ассистент</h1>
+            </div>
+            <span style="color: rgba(255, 255, 255, 0.3); font-size: 0.7rem;">
+                <i class="fas fa-robot"></i> Поиск по документам
+            </span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <a href="/" class="back-link">← Вернуться к реестру</a>
+            <h2>ИИ-ассистент</h2>
+            <p class="desc">Задайте вопрос о документах — ИИ найдёт их в базах данных министерств и ведомств ЧР</p>
+        </div>
+
+        <!-- Если ИИ недоступен, показываем ошибку -->
+        {% if not ai_available %}
+        <div class="chat-container" style="justify-content: center; align-items: center; height: 300px;">
+            <div class="error-page">
+                <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <h2>ИИ-ассистент временно недоступен</h2>
+                <p>Пожалуйста, попробуйте позже или воспользуйтесь поиском по разделам.</p>
+                <a href="/" class="btn"><i class="fas fa-arrow-left"></i> На главную</a>
+            </div>
+        </div>
+        {% else %}
+
+        <!-- Чат -->
+        <div class="chat-container">
+            <!-- Шапка чата -->
+            <div class="chat-header">
+                <div class="avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="info">
+                    <div class="name">ИИ-ассистент портала</div>
+                    <div class="status">
+                        <span class="dot"></span>
+                        Онлайн · Ищет по всем базам
+                    </div>
+                </div>
+                <button class="btn-clear" onclick="clearChat()">
+                    <i class="fas fa-eraser"></i>
+                    Очистить
+                </button>
+            </div>
+
+            <!-- Сообщения -->
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant" id="welcomeMessage">
+                    <div>
+                        Здравствуйте! Я ИИ-ассистент Регионального правового портала ЧР.
+                        <br><br>
+                        Я могу помочь вам найти документы в базах данных:
+                        <br>
+                        • Правительство ЧР (правовые акты, поручения)
+                        <br>
+                        • Минтранс
+                        <br>
+                        • МинНацИнформ
+                        <br>
+                        • Минздрав
+                        <br>
+                        • Минобр
+                        <br><br>
+                        <span style="font-size: 0.8rem; color: #9aa0a6;">
+                            Например: «Найди приказы Минздрава за 2026 год» или «Покажи документы по образованию»
+                        </span>
+                    </div>
+                    <span class="timestamp" id="welcomeTimestamp"></span>
+                </div>
+            </div>
+
+            <!-- Индикатор печати -->
+            <div class="typing-indicator" id="typingIndicator">
+                <span class="dot-typing"></span>
+                <span class="dot-typing"></span>
+                <span class="dot-typing"></span>
+            </div>
+
+            <!-- Поле ввода -->
+            <div class="chat-input-area">
+                <textarea id="chatInput" rows="1" placeholder="Напишите ваш вопрос..." maxlength="2000"></textarea>
+                <button class="btn-send" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    Отправить
+                </button>
+            </div>
+
+            <!-- Информация -->
+            <div class="chat-info">
+                <i class="fas fa-shield-alt"></i>
+                Безопасный чат — ИИ отвечает только на основе официальных документов из баз данных
+            </div>
+        </div>
+        {% endif %}
+
+        <footer class="footer">
+            <div class="copyright">© 2026 Региональный правовой портал ЧР</div>
+        </footer>
+    </div>
+
+    <script>
+        // Эффект скролла для шапки
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('mainHeader');
+            if (window.scrollY > 30) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        }, { passive: true });
+
+        // --- ЭЛЕМЕНТЫ ---
+        const messagesContainer = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+        let chatHistory = [];
+        let isProcessing = false;
+
+        // --- ВРЕМЯ ---
+        function getCurrentTime() {
+            const now = new Date();
+            return now.getHours().toString().padStart(2, '0') + ':' +
+                   now.getMinutes().toString().padStart(2, '0');
+        }
+
+        // Устанавливаем время приветствия
+        document.addEventListener('DOMContentLoaded', function() {
+            const ts = document.getElementById('welcomeTimestamp');
+            if (ts) ts.textContent = getCurrentTime();
+            chatInput.focus();
+        });
+
+        // --- ДОБАВЛЕНИЕ СООБЩЕНИЯ ---
+        function addMessage(role, content, model = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+
+            let html = `<div>${content}</div>`;
+            html += `<span class="timestamp">${getCurrentTime()}</span>`;
+
+            if (model && model !== 'error' && model !== 'offline') {
+                html += `<span class="model-badge">модель: ${model}</span>`;
+            }
+
+            messageDiv.innerHTML = html;
+            messagesContainer.appendChild(messageDiv);
+
+            chatHistory.push({ role: role, content: content });
+
+            setTimeout(() => {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 50);
+        }
+
+        // --- ОТПРАВКА ---
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+
+            if (!message || isProcessing) return;
+            if (message.length < 2) {
+                showToast('Сообщение слишком короткое', 'warning');
+                return;
+            }
+            if (message.length > 2000) {
+                showToast('Сообщение слишком длинное (макс. 2000 символов)', 'warning');
+                return;
+            }
+
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+            isProcessing = true;
+            sendBtn.disabled = true;
+
+            addMessage('user', message);
+            typingIndicator.style.display = 'flex';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            try {
+                const response = await fetch('/api/ai/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: message,
+                        history: chatHistory.slice(0, -1)
+                    })
+                });
+
+                typingIndicator.style.display = 'none';
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        addMessage('assistant', data.response, data.model);
+                    } else {
+                        addMessage('assistant', data.response || 'Произошла ошибка. Попробуйте еще раз.');
+                    }
+                } else {
+                    const error = await response.json();
+                    addMessage('assistant', 'Ошибка: ' + (error.detail || 'Неизвестная ошибка'));
+                }
+            } catch (error) {
+                console.error('Chat error:', error);
+                typingIndicator.style.display = 'none';
+                addMessage('assistant', 'Ошибка соединения. Пожалуйста, попробуйте позже.');
+            }
+
+            isProcessing = false;
+            sendBtn.disabled = false;
+            chatInput.focus();
+        }
+
+        // --- ОЧИСТКА ---
+        function clearChat() {
+            if (!confirm('Очистить историю чата?')) return;
+
+            messagesContainer.innerHTML = `
+                <div class="message assistant" id="welcomeMessage">
+                    <div>
+                        Здравствуйте! Я ИИ-ассистент Регионального правового портала ЧР.
+                        <br><br>
+                        Я могу помочь вам найти документы в базах данных:
+                        <br>
+                        • Правительство ЧР (правовые акты, поручения)
+                        <br>
+                        • Минтранс
+                        <br>
+                        • МинНацИнформ
+                        <br>
+                        • Минздрав
+                        <br>
+                        • Минобр
+                        <br><br>
+                        <span style="font-size: 0.8rem; color: #9aa0a6;">
+                            Например: «Найди приказы Минздрава за 2026 год» или «Покажи документы по образованию»
+                        </span>
+                    </div>
+                    <span class="timestamp">${getCurrentTime()}</span>
+                </div>
+            `;
+            chatHistory = [];
+            chatInput.focus();
+        }
+
+        // --- TOAST ---
+        function showToast(message, type = 'info') {
+            // Простая реализация через alert, можно заменить на красивый тост
+            console.log(`[${type}] ${message}`);
+        }
+
+        // --- ОБРАБОТЧИКИ ---
+        sendBtn.addEventListener('click', sendMessage);
+
+        chatInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+
+        chatInput.focus();
+
+        // --- ЭКСПОРТ ДЛЯ ГЛОБАЛЬНОГО ИСПОЛЬЗОВАНИЯ ---
+        window.clearChat = clearChat;
+        window.sendMessage = sendMessage;
+    </script>
+</body>
+</html>
