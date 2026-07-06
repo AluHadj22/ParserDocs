@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Документ {{ eo_number }} — Федеральные правовые акты</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f0f2f8;
+            color: #1a1a2e;
+            min-height: 100vh;
+        }
+
+        /* Декоративный фон */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(233, 69, 96, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -100px;
+            left: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 149, 59, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .header-main {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            background: rgba(26, 26, 46, 0.55);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 16px 0;
+            transition: background 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-main .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-area a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .logo-area a:hover { color: #fff; }
+
+        .logo-area h1 {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .badge-federal {
+            background: rgba(233, 69, 96, 0.15);
+            color: #e94560;
+            padding: 4px 14px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border: 1px solid rgba(233, 69, 96, 0.15);
+            white-space: nowrap;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header {
+            padding: 20px 0 16px;
+        }
+
+        .page-header .back-link {
+            color: #e94560;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .page-header .back-link:hover { text-decoration: underline; }
+
+        /* ===== КАРТОЧКА ДОКУМЕНТА ===== */
+        .document-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 32px 36px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .document-card .doc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .document-card .doc-header .doc-type {
+            display: inline-block;
+            background: rgba(233, 69, 96, 0.08);
+            color: #e94560;
+            padding: 4px 14px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .document-card .doc-header .doc-type-number {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.04);
+            color: #5f6368;
+            padding: 4px 14px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 6px;
+        }
+
+        .document-card .doc-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .document-card .doc-complex-name {
+            font-size: 0.95rem;
+            color: #5f6368;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: rgba(241, 243, 244, 0.5);
+            border-radius: 6px;
+            border-left: 3px solid #e94560;
+        }
+
+        .document-card .doc-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px 24px;
+            margin-top: 16px;
+        }
+
+        .document-card .doc-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .document-card .doc-meta-item .label {
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: #9aa0a6;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .document-card .doc-meta-item .value {
+            font-size: 0.85rem;
+            color: #1a1a2e;
+            word-break: break-word;
+        }
+
+        .document-card .doc-meta-item .value .highlight {
+            background: rgba(233, 69, 96, 0.08);
+            padding: 1px 6px;
+            border-radius: 3px;
+        }
+
+        .document-card .doc-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .document-card .doc-actions .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #e94560;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #c73652;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.25);
+        }
+
+        .btn-success {
+            background: #00953b;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background: #007a30;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 149, 59, 0.25);
+        }
+
+        .btn-secondary {
+            background: rgba(241, 243, 244, 0.7);
+            color: #5f6368;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(220, 222, 225, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #e94560;
+            border: 1px solid #e94560;
+        }
+
+        .btn-outline:hover {
+            background: #e94560;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.15);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* ===== ПРИНЯВШИЕ ОРГАНЫ ===== */
+        .authorities-section {
+            margin-top: 12px;
+        }
+
+        .authorities-section .authority-item {
+            display: inline-block;
+            background: rgba(241, 243, 244, 0.6);
+            padding: 4px 14px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #5f6368;
+            margin: 2px 4px 2px 0;
+        }
+
+        .authorities-section .authority-item.main {
+            background: rgba(233, 69, 96, 0.08);
+            color: #e94560;
+            border: 1px solid rgba(233, 69, 96, 0.15);
+        }
+
+        /* ===== ЗАГРУЗКА ===== */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading-spinner .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(233, 69, 96, 0.15);
+            border-top-color: #e94560;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== ОШИБКА ===== */
+        .error-container {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .error-container .icon {
+            font-size: 3rem;
+            color: #e94560;
+            margin-bottom: 16px;
+        }
+
+        .error-container h2 {
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .error-container p {
+            color: #5f6368;
+            margin-bottom: 20px;
+        }
+
+        .error-container .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            background: #e94560;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .error-container .btn:hover {
+            background: #c73652;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.25);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 20px;
+            padding: 20px 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .footer .copyright {
+            color: #9aa0a6;
+            font-size: 0.7rem;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+            max-width: 420px;
+            z-index: 999;
+            font-size: 0.85rem;
+        }
+
+        .toast.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.success { border-left: 3px solid #00953b; }
+        .toast.error { border-left: 3px solid #e94560; }
+        .toast.info { border-left: 3px solid #4a90d9; }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .document-card {
+                padding: 20px;
+            }
+
+            .document-card .doc-title {
+                font-size: 1.1rem;
+            }
+
+            .document-card .doc-meta-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .header-main .container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .logo-area h1 {
+                max-width: 200px;
+            }
+
+            .document-card .doc-actions {
+                flex-direction: column;
+            }
+
+            .document-card .doc-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .toast {
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .document-card .doc-meta-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .document-card {
+                padding: 16px;
+            }
+
+            .document-card .doc-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-main" id="mainHeader">
+        <div class="container">
+            <div class="logo-area">
+                <a href="/federal"><i class="fas fa-arrow-left"></i> К поиску</a>
+                <h1 id="docShortTitle">{{ document.title|default('Документ')|truncate(40, true) }}</h1>
+                <span class="badge-federal"><i class="fas fa-link"></i> pravo.gov.ru</span>
+            </div>
+            <span style="color: rgba(255,255,255,0.3); font-size: 0.7rem;">
+                <i class="fas fa-file-pdf"></i> {{ document.pages_count|default('0') }} стр.
+            </span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <a href="/federal" class="back-link">← Вернуться к поиску</a>
+        </div>
+
+        <!-- Загрузка -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner"></div>
+            <p style="margin-top: 12px; color: #9aa0a6; font-size: 0.85rem;">Загрузка документа...</p>
+        </div>
+
+        <!-- Карточка документа -->
+        <div id="documentContainer">
+            {% if document %}
+            <div class="document-card">
+                <!-- Заголовок -->
+                <div class="doc-header">
+                    <div>
+                        {% if document.document_type_name %}
+                        <span class="doc-type">{{ document.document_type_name }}</span>
+                        {% endif %}
+                        {% if document.number %}
+                        <span class="doc-type-number">№ {{ document.number }}</span>
+                        {% endif %}
+                    </div>
+                    <span style="font-size: 0.75rem; color: #9aa0a6;">
+                        <i class="fas fa-hashtag"></i> {{ document.eo_number }}
+                    </span>
+                </div>
+
+                <!-- Название -->
+                <h1 class="doc-title">{{ document.title }}</h1>
+
+                <!-- Составное название -->
+                {% if document.complex_name and document.complex_name != document.title %}
+                <div class="doc-complex-name">
+                    <i class="fas fa-quote-left" style="color: #e94560; margin-right: 8px; opacity: 0.6;"></i>
+                    {{ document.complex_name }}
+                </div>
+                {% endif %}
+
+                <!-- Мета-информация -->
+                <div class="doc-meta-grid">
+                    <div class="doc-meta-item">
+                        <span class="label"><i class="far fa-calendar-alt"></i> Дата подписания</span>
+                        <span class="value">{{ document.document_date|default('—') }}</span>
+                    </div>
+                    <div class="doc-meta-item">
+                        <span class="label"><i class="far fa-calendar-check"></i> Дата публикации</span>
+                        <span class="value">{{ document.view_date|default(document.publish_date|default('—')) }}</span>
+                    </div>
+                    <div class="doc-meta-item">
+                        <span class="label"><i class="fas fa-file-pdf"></i> Страниц</span>
+                        <span class="value">{{ document.pages_count|default('0') }}</span>
+                    </div>
+                    <div class="doc-meta-item">
+                        <span class="label"><i class="fas fa-weight-hanging"></i> Размер PDF</span>
+                        <span class="value">{{ document.pdf_size_formatted|default('—') }}</span>
+                    </div>
+                    {% if document.jd_reg_number %}
+                    <div class="doc-meta-item">
+                        <span class="label"><i class="fas fa-gavel"></i> Рег. номер в Минюсте</span>
+                        <span class="value"><span class="highlight">{{ document.jd_reg_number }}</span></span>
+                    </div>
+                    <div class="doc-meta-item">
+                        <span class="label"><i class="far fa-calendar-alt"></i> Дата регистрации</span>
+                        <span class="value">{{ document.jd_reg_date|default('—') }}</span>
+                    </div>
+                    {% endif %}
+                    {% if document.has_svg %}
+                    <div class="doc-meta-item">
+                        <span class="label"><i class="fas fa-vector-square"></i> SVG</span>
+                        <span class="value"><span style="color: #00953b;">Есть</span></span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Принявшие органы -->
+                {% if document.signatory_authorities %}
+                <div class="authorities-section">
+                    <span style="font-size: 0.65rem; font-weight: 500; color: #9aa0a6; text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 4px;">
+                        <i class="fas fa-building"></i> Принявшие органы
+                    </span>
+                    {% for authority in document.signatory_authorities %}
+                    <span class="authority-item {% if authority.is_main %}main{% endif %}">
+                        {{ authority.name }}
+                        {% if authority.is_main %}<span style="font-size: 0.6rem; opacity: 0.6;">(основной)</span>{% endif %}
+                    </span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Действия -->
+                <div class="doc-actions">
+                    <a href="/federal/api/download/{{ document.eo_number }}" class="btn btn-success" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Скачать PDF
+                    </a>
+                    <a href="#" class="btn btn-secondary" onclick="window.print(); return false;">
+                        <i class="fas fa-print"></i> Печать
+                    </a>
+                    <a href="/federal" class="btn btn-outline">
+                        <i class="fas fa-search"></i> Новый поиск
+                    </a>
+                </div>
+            </div>
+
+            <!-- Источник данных -->
+            <div style="text-align: center; padding: 12px 0; font-size: 0.7rem; color: #9aa0a6;">
+                <i class="fas fa-database"></i>
+                Данные предоставлены официальным порталом правовой информации Российской Федерации
+                <br>
+                <a href="http://pravo.gov.ru" target="_blank" style="color: #e94560; text-decoration: none;">
+                    pravo.gov.ru
+                </a>
+                <span style="margin: 0 8px;">·</span>
+                <a href="http://publication.pravo.gov.ru" target="_blank" style="color: #e94560; text-decoration: none;">
+                    publication.pravo.gov.ru
+                </a>
+            </div>
+
+            {% else %}
+            <!-- Документ не найден -->
+            <div class="error-container">
+                <div class="icon"><i class="fas fa-file-alt"></i></div>
+                <h2>Документ не найден</h2>
+                <p>Документ с номером <strong>{{ eo_number }}</strong> не найден в системе.</p>
+                <a href="/federal" class="btn">
+                    <i class="fas fa-search"></i> Вернуться к поиску
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+        <footer class="footer">
+            <div class="copyright">© 2026 Региональный правовой портал Чеченской Республики</div>
+        </footer>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span id="toastMessage">Сообщение</span>
+    </div>
+
+    <script>
+        // ============================================================
+        // Toast
+        // ============================================================
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const msg = document.getElementById('toastMessage');
+
+            msg.textContent = message;
+            toast.className = 'toast show ' + type;
+
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        // ============================================================
+        // Эффект скролла для шапки
+        // ============================================================
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('mainHeader');
+            if (window.scrollY > 30) {
+                header.style.background = 'rgba(26, 26, 46, 0.75)';
+            } else {
+                header.style.background = 'rgba(26, 26, 46, 0.55)';
+            }
+        }, { passive: true });
+
+        // ============================================================
+        // Обработка клика по ссылке PDF для показа прогресса
+        // ============================================================
+        document.querySelectorAll('.btn-success').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.getAttribute('href') && this.getAttribute('href').includes('/api/download/')) {
+                    showToast('Начинается скачивание PDF...', 'info');
+
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Скачивание...';
+                    this.disabled = true;
+
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.disabled = false;
+                    }, 5000);
+                }
+            });
+        });
+
+        // ============================================================
+        // Проверка, есть ли PDF для скачивания
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const eoNumber = '{{ document.eo_number }}';
+            if (eoNumber) {
+                fetch(`/federal/api/download/${eoNumber}`, { method: 'HEAD' })
+                    .then(response => {
+                        if (!response.ok) {
+                            const btn = document.querySelector('.btn-success');
+                            if (btn) {
+                                btn.style.opacity = '0.5';
+                                btn.title = 'PDF временно недоступен';
+                            }
+                        }
+                    })
+                    .catch(() => {});
+            }
+        });
+    </script>
+
+</body>
+</html>

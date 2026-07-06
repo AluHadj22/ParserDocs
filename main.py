@@ -18,6 +18,9 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# ============================================================
+# СОЗДАНИЕ ПРИЛОЖЕНИЯ
+# ============================================================
 app = FastAPI(title="Региональный правовой портал", version="1.0.0")
 
 # Настройка CORS
@@ -28,6 +31,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ============================================================
+# ПОДКЛЮЧЕНИЕ РОУТЕРОВ
+# ============================================================
+from api.federal import router as federal_router
+app.include_router(federal_router)
 
 # Пути к базам данных
 DB_PATHS = {
@@ -515,6 +524,28 @@ async def home(request: Request):
         }
     )
 
+@app.get("/smart-search", response_class=HTMLResponse)
+async def smart_search_page(request: Request):
+    """Страница умного поиска по всем региональным источникам."""
+    available_dbs = []
+    for db_name, db_config in DB_PATHS.items():
+        info = get_db_info(db_name, db_config)
+        if info and info['count'] > 0:
+            available_dbs.append({
+                'name': db_name,
+                'display_name': db_config['display_name'],
+                'count': info['count']
+            })
+    
+    return templates.TemplateResponse(
+        "smart_search.html",
+        {
+            "request": request,
+            "databases": available_dbs,
+            "ai_available": AI_AVAILABLE
+        }
+    )
+
 @app.get("/db/{db_name}", response_class=HTMLResponse)
 async def view_database(
     request: Request,
@@ -708,10 +739,7 @@ async def ai_chat(
     request: Request,
     data: Dict[str, Any]
 ):
-    """
-    Обрабатывает запрос к ИИ-ассистенту.
-    Ищет документы по всем базам данных и формирует ответ.
-    """
+    """Обрабатывает запрос к ИИ-ассистенту."""
     if not AI_AVAILABLE:
         return JSONResponse(
             status_code=503,
@@ -728,60 +756,15 @@ async def ai_chat(
         )
     
     try:
-        # Сначала ищем документы в базах данных
-        search_results = search_all_databases(message, limit=10)
-        
-        # Формируем контекст для ИИ
-        context = ""
-        if search_results:
-            context = "Найдены следующие документы:\n\n"
-            for i, doc in enumerate(search_results, 1):
-                title = doc.get('title', 'Без названия')
-                source = doc.get('source', 'Неизвестный источник')
-                file_url = doc.get('file_url', '')
-                date = doc.get('date') or doc.get('pub_date') or doc.get('sign_date') or ''
-                context += f"{i}. {title}\n"
-                context += f"   Источник: {source}\n"
-                if date:
-                    context += f"   Дата: {date}\n"
-                if file_url:
-                    context += f"   Ссылка: {file_url}\n"
-                context += "\n"
-        else:
-            context = "Документы по вашему запросу не найдены в базах данных."
-        
-        # Добавляем информацию о портале
-        portal_info = """
-Вы находитесь на Региональном правовом портале Чеченской Республики.
-Здесь собраны официальные документы из следующих министерств и ведомств:
-- Правительство Чеченской Республики (правовые акты, поручения Главы, Председателя Правительства, Руководителя Администрации)
-- Минтранс
-- МинНацИнформ
-- Минздрав
-- Минобр
-"""
-        
-        full_context = f"{portal_info}\n\n{context}"
-        
-        # Создаем специальный промпт с контекстом
-        enhanced_message = f"""
-Пользователь спрашивает: {message}
-
-Информация из базы данных:
-{full_context}
-
-Пожалуйста, ответьте на вопрос пользователя, используя информацию из базы данных.
-Если документы найдены, укажите их названия, источники и ссылки для скачивания.
-Если документы не найдены, предложите уточнить запрос или обратиться в соответствующее министерство.
-"""
-        
-        response = get_ai_response(enhanced_message, history)
+        # Теперь поиск встроен в ai_service
+        response = get_ai_response(message, history)
         
         return JSONResponse({
             "success": True,
             "response": response.get('response', 'Не удалось получить ответ'),
             "model": response.get('model', 'unknown'),
-            "found_documents": len(search_results) > 0
+            "found_documents": response.get('found_documents', False),
+            "document_count": response.get('document_count', 0)
         })
         
     except Exception as e:
@@ -790,13 +773,37 @@ async def ai_chat(
             status_code=500,
             content={"success": False, "response": f"Ошибка при обработке запроса: {str(e)}"}
         )
-
 @app.get("/api/ai/search")
-async def ai_search(query: str = Query(..., min_length=2)):
+async def ai_search(
+    query: str = Query(..., min_length=2, description="Поисковый запрос"),
+    source: Optional[str] = Query(None, description="Фильтр по источнику (db_name)"),
+    limit: int = Query(100, ge=1, le=500, description="Максимальное количество результатов")
+):
     """
-    API для поиска документов по всем базам данных.
+    API для умного поиска документов по всем базам данных.
+    Поддерживает фильтрацию по источнику.
     """
-    results = search_all_databases(query, limit=50)
+    results = search_all_databases(query, limit=limit)
+    
+    # Фильтруем по источнику, если указан
+    if source:
+        results = [r for r in results if r.get('source_key') == source]
+    
+    # Добавляем релевантность (процент совпадения)
+    for doc in results:
+        title = doc.get('title', '').lower()
+        query_lower = query.lower()
+        if query_lower in title:
+            matches = title.count(query_lower)
+            max_possible = len(title) / len(query_lower) if query_lower else 1
+            relevance = min(100, int((matches / max_possible) * 100 + 30))
+            doc['relevance'] = min(100, relevance)
+        else:
+            doc['relevance'] = 30
+    
+    # Сортируем по релевантности (по убыванию)
+    results.sort(key=lambda x: x.get('relevance', 0), reverse=True)
+    
     return {"success": True, "count": len(results), "results": results}
 
 def get_display_name(db_name):

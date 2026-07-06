@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Федеральные правовые акты — Региональный правовой портал ЧР</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f0f2f8;
+            color: #1a1a2e;
+            min-height: 100vh;
+        }
+
+        /* Декоративный фон */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(233, 69, 96, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -100px;
+            left: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 149, 59, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .header-main {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            background: rgba(26, 26, 46, 0.55);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 16px 0;
+            transition: background 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-main .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-area a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .logo-area a:hover { color: #fff; }
+
+        .logo-area h1 {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .badge-federal {
+            background: rgba(233, 69, 96, 0.15);
+            color: #e94560;
+            padding: 4px 14px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border: 1px solid rgba(233, 69, 96, 0.15);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header {
+            padding: 24px 0 16px;
+        }
+
+        .page-header .back-link {
+            color: #e94560;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .page-header .back-link:hover { text-decoration: underline; }
+
+        .page-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 4px;
+            color: #1a1a2e;
+        }
+
+        .page-header .desc {
+            color: #5f6368;
+            font-size: 0.9rem;
+        }
+
+        /* ===== ФИЛЬТРЫ ===== */
+        .filters-section {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .filter-group label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #5f6368;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 8px 12px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.9);
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #e94560;
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+        }
+
+        .filter-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239aa0a6' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        .filter-group input[type="date"] {
+            padding-right: 8px;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-actions .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #e94560;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #c73652;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.25);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-secondary {
+            background: rgba(241, 243, 244, 0.7);
+            color: #5f6368;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(220, 222, 225, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #00953b;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background: #007a30;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 149, 59, 0.25);
+        }
+
+        /* ===== СТАТИСТИКА ===== */
+        .stats-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #5f6368;
+            align-items: center;
+        }
+
+        .stats-row .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stats-row .stat-item strong {
+            color: #1a1a2e;
+        }
+
+        .stats-row .stat-divider {
+            color: #e8eaed;
+        }
+
+        /* ===== РЕЗУЛЬТАТЫ ===== */
+        .results-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-bottom: 30px;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 8px;
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .result-item:hover {
+            border-color: rgba(233, 69, 96, 0.3);
+            box-shadow: 0 8px 32px rgba(233, 69, 96, 0.06);
+            transform: translateX(3px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .result-title {
+            font-weight: 500;
+            color: #1a1a2e;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            word-break: break-word;
+        }
+
+        .result-title a {
+            color: #1a1a2e;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .result-title a:hover { color: #e94560; }
+
+        .result-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.7rem;
+            color: #9aa0a6;
+            margin-top: 4px;
+            align-items: center;
+        }
+
+        .result-meta .badge {
+            background: rgba(241, 243, 244, 0.7);
+            padding: 2px 10px;
+            border-radius: 4px;
+            color: #5f6368;
+        }
+
+        .result-meta .badge-federal-type {
+            background: rgba(233, 69, 96, 0.08);
+            color: #e94560;
+        }
+
+        .result-meta .file-link {
+            color: #e94560;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .result-meta .file-link:hover { text-decoration: underline; }
+
+        .result-meta .eo-number {
+            color: #9aa0a6;
+            font-family: monospace;
+        }
+
+        /* ===== ПАГИНАЦИЯ ===== */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            padding-bottom: 30px;
+        }
+
+        .pagination a, .pagination span {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            color: #5f6368;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.25s;
+        }
+
+        .pagination a:hover {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #e94560;
+        }
+
+        .pagination .active {
+            background: #e94560;
+            color: #fff;
+            border-color: #e94560;
+            box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
+        }
+
+        .pagination .disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+
+        /* ===== НЕТ РЕЗУЛЬТАТОВ ===== */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9aa0a6;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .no-results .icon {
+            font-size: 2.4rem;
+            margin-bottom: 12px;
+            color: #9aa0a6;
+        }
+
+        .no-results h3 {
+            font-weight: 500;
+            color: #5f6368;
+            margin-bottom: 4px;
+        }
+
+        /* ===== LOADING ===== */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .loading-spinner .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(233, 69, 96, 0.15);
+            border-top-color: #e94560;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 20px;
+            padding: 20px 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .footer .copyright {
+            color: #9aa0a6;
+            font-size: 0.7rem;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+            max-width: 420px;
+            z-index: 999;
+            font-size: 0.85rem;
+        }
+
+        .toast.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.success { border-left: 3px solid #00953b; }
+        .toast.error { border-left: 3px solid #e94560; }
+        .toast.info { border-left: 3px solid #4a90d9; }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .filters-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .filter-actions {
+                flex-direction: column;
+            }
+
+            .filter-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .header-main .container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stats-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .stats-row .stat-divider {
+                display: none;
+            }
+
+            .toast {
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+                max-width: none;
+            }
+
+            .result-meta {
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-main" id="mainHeader">
+        <div class="container">
+            <div class="logo-area">
+                <a href="/"><i class="fas fa-arrow-left"></i> На главную</a>
+                <h1>Федеральные правовые акты</h1>
+                <span class="badge-federal"><i class="fas fa-link"></i> pravo.gov.ru</span>
+            </div>
+            <span style="color: rgba(255,255,255,0.3); font-size: 0.7rem;">
+                <i class="fas fa-balance-scale"></i> Официальный источник
+            </span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <a href="/" class="back-link">← К выбору источника</a>
+            <h2>Поиск федеральных правовых актов</h2>
+            <p class="desc">Документы из официального портала правовой информации Российской Федерации</p>
+        </div>
+
+        <!-- Фильтры -->
+        <div class="filters-section">
+            <div class="filters-grid">
+                <!-- Поиск по тексту -->
+                <div class="filter-group" style="grid-column: span 2;">
+                    <label for="searchInput"><i class="fas fa-search"></i> Поиск по тексту</label>
+                    <input type="text" id="searchInput" placeholder="Введите текст для поиска..." value="">
+                </div>
+
+                <!-- Блок публикации -->
+                <div class="filter-group">
+                    <label for="blockSelect">Блок публикации</label>
+                    <select id="blockSelect">
+                        <option value="">Все блоки</option>
+                        {% for block in blocks %}
+                        <option value="{{ block.code }}">{{ block.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Вид документа -->
+                <div class="filter-group">
+                    <label for="docTypeSelect">Вид документа</label>
+                    <select id="docTypeSelect">
+                        <option value="">Все виды</option>
+                        {% for doc_type in document_types %}
+                        <option value="{{ doc_type.id }}">{{ doc_type.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Принявший орган -->
+                <div class="filter-group">
+                    <label for="authoritySelect">Принявший орган</label>
+                    <select id="authoritySelect">
+                        <option value="">Все органы</option>
+                        {% for authority in signatory_authorities %}
+                        <option value="{{ authority.id }}">{{ authority.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Период -->
+                <div class="filter-group">
+                    <label for="periodSelect">Период</label>
+                    <select id="periodSelect">
+                        <option value="">Все периоды</option>
+                        {% for period in period_types %}
+                        <option value="{{ period.value }}">{{ period.label }}</option>
+                        {% endfor %}
+                        <option value="day">Конкретная дата</option>
+                    </select>
+                </div>
+
+                <!-- Дата (для периода "day") -->
+                <div class="filter-group" id="dateGroup" style="display: none;">
+                    <label for="dateInput">Дата</label>
+                    <input type="date" id="dateInput">
+                </div>
+
+                <!-- Дата подписания от -->
+                <div class="filter-group">
+                    <label for="docDateFrom">Дата подписания от</label>
+                    <input type="date" id="docDateFrom">
+                </div>
+
+                <!-- Дата подписания до -->
+                <div class="filter-group">
+                    <label for="docDateTo">Дата подписания до</label>
+                    <input type="date" id="docDateTo">
+                </div>
+
+                <!-- Дата публикации от -->
+                <div class="filter-group">
+                    <label for="pubDateFrom">Дата публикации от</label>
+                    <input type="date" id="pubDateFrom">
+                </div>
+
+                <!-- Дата публикации до -->
+                <div class="filter-group">
+                    <label for="pubDateTo">Дата публикации до</label>
+                    <input type="date" id="pubDateTo">
+                </div>
+
+                <!-- Номер документа -->
+                <div class="filter-group">
+                    <label for="numberInput">Номер документа</label>
+                    <input type="text" id="numberInput" placeholder="Например: 123">
+                </div>
+
+                <!-- Тип поиска по номеру -->
+                <div class="filter-group">
+                    <label for="numberSearchTypeSelect">Тип поиска по номеру</label>
+                    <select id="numberSearchTypeSelect">
+                        <option value="">Точно</option>
+                        {% for st in search_types %}
+                        <option value="{{ st.value }}">{{ st.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-actions">
+                <button class="btn btn-primary" id="searchBtn">
+                    <i class="fas fa-search"></i> Найти документы
+                </button>
+                <button class="btn btn-secondary" id="resetBtn">
+                    <i class="fas fa-undo"></i> Сбросить
+                </button>
+                <span style="margin-left: auto; font-size: 0.75rem; color: #9aa0a6;">
+                    <i class="fas fa-info-circle"></i> Данные из официального API pravo.gov.ru
+                </span>
+            </div>
+        </div>
+
+        <!-- Статистика -->
+        <div class="stats-row" id="statsRow">
+            <span class="stat-item">
+                <i class="fas fa-file-alt" style="color: #e94560;"></i>
+                Найдено: <strong id="totalCount">0</strong> документов
+            </span>
+            <span class="stat-divider">|</span>
+            <span class="stat-item">
+                <i class="fas fa-layer-group"></i>
+                Страница: <strong id="currentPage">1</strong> из <strong id="totalPages">0</strong>
+            </span>
+            <span class="stat-divider">|</span>
+            <span class="stat-item">
+                <i class="fas fa-list-ul"></i>
+                На странице: <strong id="perPage">30</strong>
+            </span>
+            <span style="margin-left: auto; font-size: 0.7rem; color: #9aa0a6;" id="sourceInfo">
+                <i class="fas fa-database"></i> Источник: publication.pravo.gov.ru
+            </span>
+        </div>
+
+        <!-- Результаты -->
+        <div id="resultsContainer" class="results-container">
+            <!-- Результаты будут загружены через JavaScript -->
+        </div>
+
+        <!-- Пагинация -->
+        <div id="paginationContainer" class="pagination"></div>
+
+        <!-- Сообщение об ошибке -->
+        <div id="errorMessage" style="display: none; text-align: center; padding: 20px; color: #e94560;">
+            <i class="fas fa-exclamation-circle"></i> <span id="errorText"></span>
+        </div>
+
+        <!-- Загрузка -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner"></div>
+            <p style="margin-top: 12px; color: #9aa0a6; font-size: 0.85rem;">Загрузка документов...</p>
+        </div>
+
+        <footer class="footer">
+            <div class="copyright">© 2026 Региональный правовой портал Чеченской Республики</div>
+        </footer>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span id="toastMessage">Сообщение</span>
+    </div>
+
+    <script>
+        // ============================================================
+        // Конфигурация
+        // ============================================================
+        const API_BASE = '/federal/api';
+        const ITEMS_PER_PAGE = 30;
+
+        // ============================================================
+        // Состояние
+        // ============================================================
+        let state = {
+            query: '',
+            block: '',
+            documentTypeId: '',
+            signatoryAuthorityId: '',
+            periodType: '',
+            date: '',
+            documentDateFrom: '',
+            documentDateTo: '',
+            publishDateFrom: '',
+            publishDateTo: '',
+            number: '',
+            numberSearchType: '',
+            page: 1,
+            total: 0,
+            totalPages: 0,
+            isLoading: false
+        };
+
+        // ============================================================
+        // DOM Элементы
+        // ============================================================
+        const elements = {
+            searchInput: document.getElementById('searchInput'),
+            blockSelect: document.getElementById('blockSelect'),
+            docTypeSelect: document.getElementById('docTypeSelect'),
+            authoritySelect: document.getElementById('authoritySelect'),
+            periodSelect: document.getElementById('periodSelect'),
+            dateInput: document.getElementById('dateInput'),
+            dateGroup: document.getElementById('dateGroup'),
+            docDateFrom: document.getElementById('docDateFrom'),
+            docDateTo: document.getElementById('docDateTo'),
+            pubDateFrom: document.getElementById('pubDateFrom'),
+            pubDateTo: document.getElementById('pubDateTo'),
+            numberInput: document.getElementById('numberInput'),
+            numberSearchTypeSelect: document.getElementById('numberSearchTypeSelect'),
+            searchBtn: document.getElementById('searchBtn'),
+            resetBtn: document.getElementById('resetBtn'),
+            resultsContainer: document.getElementById('resultsContainer'),
+            paginationContainer: document.getElementById('paginationContainer'),
+            loadingSpinner: document.getElementById('loadingSpinner'),
+            totalCount: document.getElementById('totalCount'),
+            currentPage: document.getElementById('currentPage'),
+            totalPages: document.getElementById('totalPages'),
+            perPage: document.getElementById('perPage'),
+            errorMessage: document.getElementById('errorMessage'),
+            errorText: document.getElementById('errorText'),
+            statsRow: document.getElementById('statsRow'),
+            toast: document.getElementById('toast'),
+            toastMessage: document.getElementById('toastMessage')
+        };
+
+        // ============================================================
+        // Toast
+        // ============================================================
+        function showToast(message, type = 'info') {
+            const toast = elements.toast;
+            const msg = elements.toastMessage;
+
+            msg.textContent = message;
+            toast.className = 'toast show ' + type;
+
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        // ============================================================
+        // Форматирование
+        // ============================================================
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                return `${parts[2]}.${parts[1]}.${parts[0]}`;
+            }
+            return dateStr;
+        }
+
+        function formatFileSize(bytes) {
+            if (!bytes) return '0 B';
+            const units = ['B', 'KB', 'MB', 'GB'];
+            let size = bytes;
+            let unitIndex = 0;
+            while (size >= 1024 && unitIndex < units.length - 1) {
+                size /= 1024;
+                unitIndex++;
+            }
+            return `${size.toFixed(1)} ${units[unitIndex]}`;
+        }
+
+        function highlightText(text, query) {
+            if (!query || query.trim().length < 2) return text;
+            const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`(${escaped})`, 'gi');
+            return text.replace(regex, '<mark style="background: rgba(233,69,96,0.15); border-radius: 2px; padding: 0 2px;">$1</mark>');
+        }
+
+        // ============================================================
+        // Рендеринг
+        // ============================================================
+        function renderResults(documents) {
+            const container = elements.resultsContainer;
+
+            if (!documents || documents.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <div class="icon"><i class="fas fa-file-alt"></i></div>
+                        <h3>Документы не найдены</h3>
+                        <p>Измените параметры поиска и попробуйте снова</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            documents.forEach(doc => {
+                const title = doc.title || doc.complex_name || 'Без названия';
+                const highlightedTitle = highlightText(title, state.query);
+
+                html += `
+                    <div class="result-item">
+                        <div class="result-title">
+                            <a href="/federal/document/${doc.eo_number}">${highlightedTitle}</a>
+                        </div>
+                        <div class="result-meta">
+                            ${doc.document_type_name ? `<span class="badge badge-federal-type">${doc.document_type_name}</span>` : ''}
+                            ${doc.number ? `<span>№ ${doc.number}</span>` : ''}
+                            ${doc.document_date ? `<span>${formatDate(doc.document_date)}</span>` : ''}
+                            ${doc.view_date ? `<span>${doc.view_date}</span>` : ''}
+                            ${doc.pages_count ? `<span>${doc.pages_count} стр.</span>` : ''}
+                            ${doc.pdf_size_formatted ? `<span>${doc.pdf_size_formatted}</span>` : ''}
+                            <span class="eo-number">${doc.eo_number}</span>
+                            <a href="/federal/api/download/${doc.eo_number}" class="file-link" target="_blank">
+                                <i class="fas fa-file-pdf"></i> Скачать PDF
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderPagination() {
+            const container = elements.paginationContainer;
+
+            if (state.totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+            const current = state.page;
+            const total = state.totalPages;
+
+            // Previous
+            if (current > 1) {
+                html += `<a href="#" data-page="${current - 1}">←</a>`;
+            } else {
+                html += `<span class="disabled">←</span>`;
+            }
+
+            // Pages
+            const startPage = Math.max(1, current - 2);
+            const endPage = Math.min(total, current + 2);
+
+            if (startPage > 1) {
+                html += `<a href="#" data-page="1">1</a>`;
+                if (startPage > 2) html += `<span>…</span>`;
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                if (i === current) {
+                    html += `<span class="active">${i}</span>`;
+                } else {
+                    html += `<a href="#" data-page="${i}">${i}</a>`;
+                }
+            }
+
+            if (endPage < total) {
+                if (endPage < total - 1) html += `<span>…</span>`;
+                html += `<a href="#" data-page="${total}">${total}</a>`;
+            }
+
+            // Next
+            if (current < total) {
+                html += `<a href="#" data-page="${current + 1}">→</a>`;
+            } else {
+                html += `<span class="disabled">→</span>`;
+            }
+
+            container.innerHTML = html;
+
+            // Event listeners
+            container.querySelectorAll('a[data-page]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = parseInt(link.dataset.page);
+                    if (page !== state.page) {
+                        state.page = page;
+                        performSearch();
+                    }
+                });
+            });
+        }
+
+        function updateStats() {
+            elements.totalCount.textContent = state.total || 0;
+            elements.currentPage.textContent = state.page || 1;
+            elements.totalPages.textContent = state.totalPages || 0;
+            elements.perPage.textContent = ITEMS_PER_PAGE;
+        }
+
+        function setLoading(isLoading) {
+            state.isLoading = isLoading;
+            elements.loadingSpinner.style.display = isLoading ? 'block' : 'none';
+            elements.searchBtn.disabled = isLoading;
+            elements.searchBtn.innerHTML = isLoading ?
+                '<i class="fas fa-spinner fa-spin"></i> Загрузка...' :
+                '<i class="fas fa-search"></i> Найти документы';
+        }
+
+        function showError(message) {
+            elements.errorMessage.style.display = 'block';
+            elements.errorText.textContent = message;
+            setTimeout(() => {
+                elements.errorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // ============================================================
+        // Поиск
+        // ============================================================
+        async function performSearch() {
+            if (state.isLoading) return;
+
+            setLoading(true);
+            elements.errorMessage.style.display = 'none';
+            elements.resultsContainer.innerHTML = '';
+
+            try {
+                // Собираем параметры
+                const params = new URLSearchParams();
+                if (state.query) params.append('query', state.query);
+                if (state.block) params.append('block', state.block);
+                if (state.documentTypeId) params.append('document_type_id', state.documentTypeId);
+                if (state.signatoryAuthorityId) params.append('signatory_authority_id', state.signatoryAuthorityId);
+                if (state.periodType) params.append('period_type', state.periodType);
+                if (state.date) params.append('date', state.date);
+                if (state.documentDateFrom) params.append('document_date_from', state.documentDateFrom);
+                if (state.documentDateTo) params.append('document_date_to', state.documentDateTo);
+                if (state.publishDateFrom) params.append('publish_date_from', state.publishDateFrom);
+                if (state.publishDateTo) params.append('publish_date_to', state.publishDateTo);
+                if (state.number) params.append('number', state.number);
+                if (state.numberSearchType !== '') params.append('number_search_type', state.numberSearchType);
+                params.append('page', state.page);
+                params.append('per_page', ITEMS_PER_PAGE);
+
+                const url = `${API_BASE}/search?${params.toString()}`;
+
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Ошибка API');
+                }
+
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.message || 'Ошибка при выполнении поиска');
+                }
+
+                // Обновляем состояние
+                state.total = data.total || 0;
+                state.totalPages = data.total_pages || 0;
+
+                // Рендерим
+                renderResults(data.documents);
+                renderPagination();
+                updateStats();
+
+                if (data.total === 0) {
+                    showToast('Документы не найдены', 'info');
+                } else {
+                    showToast(`Найдено ${data.total} документов`, 'success');
+                }
+
+            } catch (error) {
+                console.error('Search error:', error);
+                showError(error.message || 'Ошибка при выполнении поиска');
+                renderResults([]);
+                renderPagination();
+                updateStats();
+                showToast(error.message || 'Ошибка поиска', 'error');
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // ============================================================
+        // Получение значений из формы
+        // ============================================================
+        function getSearchState() {
+            const periodType = elements.periodSelect.value;
+
+            return {
+                query: elements.searchInput.value.trim(),
+                block: elements.blockSelect.value,
+                documentTypeId: elements.docTypeSelect.value,
+                signatoryAuthorityId: elements.authoritySelect.value,
+                periodType: periodType,
+                date: periodType === 'day' ? elements.dateInput.value : '',
+                documentDateFrom: elements.docDateFrom.value,
+                documentDateTo: elements.docDateTo.value,
+                publishDateFrom: elements.pubDateFrom.value,
+                publishDateTo: elements.pubDateTo.value,
+                number: elements.numberInput.value.trim(),
+                numberSearchType: elements.numberSearchTypeSelect.value,
+                page: 1
+            };
+        }
+
+        // ============================================================
+        // Обработчики событий
+        // ============================================================
+
+        // Показать/скрыть поле даты
+        elements.periodSelect.addEventListener('change', function() {
+            const isDay = this.value === 'day';
+            elements.dateGroup.style.display = isDay ? 'block' : 'none';
+            if (!isDay) {
+                elements.dateInput.value = '';
+            }
+        });
+
+        // Поиск
+        elements.searchBtn.addEventListener('click', function() {
+            const newState = getSearchState();
+            const queryChanged = JSON.stringify(newState) !== JSON.stringify({
+                ...state,
+                page: 1,
+                total: 0,
+                totalPages: 0,
+                isLoading: false
+            });
+
+            Object.assign(state, newState);
+            if (queryChanged) {
+                state.page = 1;
+            }
+            performSearch();
+        });
+
+        // Сброс
+        elements.resetBtn.addEventListener('click', function() {
+            elements.searchInput.value = '';
+            elements.blockSelect.value = '';
+            elements.docTypeSelect.value = '';
+            elements.authoritySelect.value = '';
+            elements.periodSelect.value = '';
+            elements.dateInput.value = '';
+            elements.docDateFrom.value = '';
+            elements.docDateTo.value = '';
+            elements.pubDateFrom.value = '';
+            elements.pubDateTo.value = '';
+            elements.numberInput.value = '';
+            elements.numberSearchTypeSelect.value = '';
+            elements.dateGroup.style.display = 'none';
+
+            state = {
+                ...state,
+                query: '',
+                block: '',
+                documentTypeId: '',
+                signatoryAuthorityId: '',
+                periodType: '',
+                date: '',
+                documentDateFrom: '',
+                documentDateTo: '',
+                publishDateFrom: '',
+                publishDateTo: '',
+                number: '',
+                numberSearchType: '',
+                page: 1,
+                total: 0,
+                totalPages: 0
+            };
+
+            performSearch();
+        });
+
+        // Enter в поле поиска
+        elements.searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                elements.searchBtn.click();
+            }
+        });
+
+        // ============================================================
+        // Инициализация
+        // ============================================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            elements.periodSelect.value = 'daily';
+
+            const newState = getSearchState();
+            Object.assign(state, newState);
+            state.page = 1;
+
+            performSearch();
+
+            window.addEventListener('scroll', function() {
+                const header = document.getElementById('mainHeader');
+                if (window.scrollY > 30) {
+                    header.style.background = 'rgba(26, 26, 46, 0.75)';
+                } else {
+                    header.style.background = 'rgba(26, 26, 46, 0.55)';
+                }
+            }, { passive: true });
+        });
+    </script>
+</body>
+</html>
